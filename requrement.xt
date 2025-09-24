@@ -1,0 +1,9 @@
+WriteWise Requirements
+
+Prerequisites: Node.js 18+, PostgreSQL 15+, Redis 7+, Git, Docker (optional)
+
+Install dependencies:
+1) npm install
+2) cd apps/api; npx prisma generate
+3) npm run dev
+
