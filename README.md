@@ -58,7 +58,8 @@ A comprehensive full-stack web application that revolutionizes writing education
 - Zustand
 - Recharts
 
-### Backend
+### Backend (Dual Implementation)
+**NestJS Backend:**
 - NestJS
 - TypeScript
 - PostgreSQL
@@ -66,6 +67,16 @@ A comprehensive full-stack web application that revolutionizes writing education
 - JWT Authentication
 - OpenAI API
 - BullMQ
+- Redis
+
+**Python FastAPI Backend:**
+- FastAPI
+- Python 3.10+
+- SQLite (development) / PostgreSQL (production)
+- SQLAlchemy ORM
+- JWT Authentication
+- Google Gemini AI
+- Celery
 - Redis
 
 ### DevOps
@@ -106,7 +117,9 @@ A comprehensive full-stack web application that revolutionizes writing education
    # Edit the files with your configuration
    ```
 
-4. **Set up the database**
+4. **Set up the database (Choose one backend)**
+   
+   **Option A: NestJS Backend (PostgreSQL)**
    ```bash
    # Generate Prisma client
    cd apps/api
@@ -118,6 +131,22 @@ A comprehensive full-stack web application that revolutionizes writing education
    # Seed the database (optional)
    npx prisma db seed
    ```
+   
+   **Option B: Python FastAPI Backend (SQLite)**
+   ```bash
+   # Create virtual environment
+   cd apps/backend
+   python -m venv .venv
+   
+   # Activate virtual environment
+   # Windows:
+   .venv\Scripts\activate
+   # macOS/Linux:
+   source .venv/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   ```
 
 5. **Start the development servers**
    ```bash
@@ -125,8 +154,12 @@ A comprehensive full-stack web application that revolutionizes writing education
    npm run dev
    
    # Or start individually
-   npm run dev:web    # Frontend on http://localhost:3000
-   npm run dev:api     # Backend on http://localhost:3001
+   npm run dev:web          # Frontend on http://localhost:3000
+   npm run dev:api          # NestJS Backend on http://localhost:3001
+   
+   # For Python backend:
+   cd apps/backend
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
 ### Docker Setup
@@ -166,15 +199,71 @@ A comprehensive full-stack web application that revolutionizes writing education
 
 ### Project Structure
 ```
-writewise/
+WriteWise/
 ├── apps/
-│   ├── web/                 # Next.js frontend
-│   └── api/                 # NestJS backend
+│   ├── api/                 # NestJS backend API
+│   │   ├── Dockerfile
+│   │   ├── nest-cli.json
+│   │   ├── package.json
+│   │   ├── prisma/
+│   │   │   └── schema.prisma
+│   │   ├── src/
+│   │   │   ├── ai/          # AI services and controllers
+│   │   │   ├── analytics/   # Analytics endpoints
+│   │   │   ├── auth/        # Authentication system
+│   │   │   │   ├── dto/     # Data transfer objects
+│   │   │   │   ├── guards/  # JWT auth guards
+│   │   │   │   └── strategies/ # Auth strategies
+│   │   │   ├── common/      # Shared utilities
+│   │   │   │   └── prisma/  # Database service
+│   │   │   ├── essays/      # Essay management
+│   │   │   ├── reviews/     # Review system
+│   │   │   ├── users/       # User management
+│   │   │   ├── app.module.ts
+│   │   │   └── main.ts
+│   │   └── tsconfig.json
+│   ├── backend/             # Python FastAPI backend (alternative)
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   ├── static/          # Static files
+│   │   ├── app/
+│   │   │   ├── models/      # SQLAlchemy models
+│   │   │   ├── routers/     # API routes
+│   │   │   ├── schemas/     # Pydantic schemas
+│   │   │   ├── services/    # Business logic
+│   │   │   ├── config.py    # Configuration
+│   │   │   ├── db.py        # Database setup
+│   │   │   ├── main.py      # FastAPI app
+│   │   │   └── security.py  # Auth utilities
+│   │   └── writewise_demo.db # SQLite database
+│   └── web/                 # Next.js frontend
+│       ├── Dockerfile
+│       ├── next.config.js
+│       ├── package.json
+│       ├── src/
+│       │   ├── app/         # App router pages
+│       │   │   ├── globals.css
+│       │   │   ├── layout.tsx
+│       │   │   └── page.tsx
+│       │   ├── components/  # React components
+│       │   │   ├── dashboard/    # Dashboard components
+│       │   │   ├── essay-editor/ # Essay editing
+│       │   │   ├── landing/      # Landing page
+│       │   │   ├── review-system/ # Review components
+│       │   │   └── ui/           # Base UI components
+│       │   ├── hooks/       # Custom React hooks
+│       │   ├── lib/         # Utilities and API client
+│       │   ├── types/       # TypeScript definitions
+│       │   └── utils/       # Helper functions
+│       ├── tailwind.config.js
+│       └── tsconfig.json
 ├── packages/
-│   ├── shared/              # Shared utilities
-│   └── ui/                  # UI components
-├── .github/workflows/       # CI/CD pipelines
+│   ├── shared/              # Shared utilities (placeholder)
+│   └── ui/                  # UI components (placeholder)
 ├── docker-compose.yml       # Development environment
+├── Dockerfile               # Root Dockerfile
+├── package.json             # Root package.json (monorepo)
+├── turbo.json               # Turborepo configuration
 └── README.md
 ```
 
@@ -277,5 +366,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **WriteWise** - Transforming writing education through AI and collaboration 🚀
-#   W r i t e - W i s e - L o r d s - B i t s  
+#   W r i t e - W i s e - L o r d s - B i t s 
+ 
  
